@@ -11,4 +11,5 @@ public class Korean {
         this.name = name;
         this.ssn = ssn;
     }
+
 }
