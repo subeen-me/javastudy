@@ -1,0 +1,12 @@
+package javaInheritance;
+
+public class SmartPhone extends Phone{
+
+    public SmartPhone(String owner) {
+        super(owner); //Phone의 생성자를 호출함
+    }
+
+    public void internetSearch() {
+        System.out.println("인터넷 검색을 합니다.");
+    }
+}
