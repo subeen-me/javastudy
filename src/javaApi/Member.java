@@ -17,4 +17,9 @@ public class Member {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() { //id가 동일한 문자열일 경우 같은 해시 코드를 리턴
+        return id.hashCode();
+    }
 }
