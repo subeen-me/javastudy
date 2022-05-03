@@ -19,7 +19,10 @@ public class BankStatementAnalyzer {
 
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
 
-        final List<BankTransaction> transactions = bankStatementProcessor.findTransactions(new BankTransactionsIsInFebruaryAndExpecsive());
+        final List<BankTransaction> transactions
+                = bankStatementProcessor.findTransactions(bankTransaction ->
+                            bankTransaction.getDate().getMonth() == Month.FEBRUARY
+                            && bankTransaction.getAmount() >= 1_000);
 
         collectSummary(bankStatementProcessor);
     }
@@ -29,7 +32,7 @@ public class BankStatementAnalyzer {
         @Override
         public boolean test(final BankTransaction bankTransaction) {
             return bankTransaction.getDate().getMonth() == Month.FEBRUARY
-                    && bankTransaction.getAmount() >= 1000;
+                    && bankTransaction.getAmount() >= 1_000;
         }
     }
 
