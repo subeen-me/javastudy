@@ -11,19 +11,29 @@ public class BankStatementAnalyzer {
     private static final String RESOURCES = "src/RealWorldSoftwareDevelopment/resources";
     private static final BankStatementCSVParser bankStatementParser = new BankStatementCSVParser();
 
-    public static void main(final String... args) throws IOException {
-
-        final String fileName = args[0];
+    public void analyze(final String fileName, final BankStatementParser bankStatementParser) throws IOException {
         final Path path = Paths.get(RESOURCES + fileName);
         final List<String> lines = Files.readAllLines(path);
 
-        final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFromCSV(lines);
+        final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines);
+
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
+
+        final List<BankTransaction> transactions = bankStatementProcessor.findTransactions(new BankTransactionsIsInFebruaryAndExpecsive());
 
         collectSummary(bankStatementProcessor);
     }
 
-    private static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
+    class BankTransactionsIsInFebruaryAndExpecsive implements BankTransactionFilter {
+
+        @Override
+        public boolean test(final BankTransaction bankTransaction) {
+            return bankTransaction.getDate().getMonth() == Month.FEBRUARY
+                    && bankTransaction.getAmount() >= 1000;
+        }
+    }
+
+    public static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
         System.out.println("The total for all transactions is " + bankStatementProcessor.calculateTotalAmount());
         System.out.println("The total for all transactions in January is " + bankStatementProcessor.calculateTotalInMonth(Month.JANUARY));
         System.out.println("The total for all transactions is " + bankStatementProcessor.calculateTotalForCategory("Salary"));
